@@ -1,0 +1,67 @@
+@import "normalize";
+@import "modern-business";
+
+* {
+  box-sizing: border-box;
+}
+
+.follower-card {
+	border: black 1px;
+}
+
+.container {
+	padding: 2% 5%;
+}
+
+input {
+  padding: 10px;
+  margin: 3px;
+  width: 100%;
+  border: solid 5px #c9c9c9;
+  transition: border 0.3s;
+}
+
+.follower-card {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 10px;
+  grid-template-rows: minmax(50px, auto);
+}
+
+.follower-portrait{
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.follower-data {
+	grid-row: 1;
+	grid-column: 2/5;
+}
+
+.follower-portrait img{
+  width: 100%;
+}
+
+button.more-data-button {
+	background-color: #008CBA;
+	border-radius: 8px;
+	border: none;
+}
+
+#main {
+	background-color: #F5F5F5;
+	border-radius: 5px;
+	border: #DDDDDD 1px;
+	margin: 1%;
+}
+
+#action-bar {
+	padding: 0% 1%;
+	background-color: black;
+	h1 {
+		color: white;
+		font-size: 2em;
+    padding: 0.30em 0;
+    margin: 0;
+	}
+}

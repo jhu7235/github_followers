@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Promise from 'bluebird';
+import FollowerCard from './FollowerCard.jsx';
 
 const API_PREFIX = 'https://api.github.com/';
 
@@ -13,43 +15,54 @@ export default class Main extends Component {
       followers: [],
       error: null,
       selectedFollower: '',
+      userName: null,
     };
 
     this.searchFollowers = this.searchFollowers.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.updateSelectedFollower = this.updateSelectedFollower.bind(this);
   }
 
   searchFollowers(follower) {
+    console.log(follower);
+    if (this.selectedFollower === '') return true;
     // userName match
     if (this.matchCredentials(follower.login)) return true;
     // name match
-    if (follower.name && this.matchCredentials(follower.name.split(' ')[0])) return true;
-    if (follower.name && this.matchCredentials(follower.name.split(' ')[1])) return true;
+    if(follower.name) {
+      let firstName = follower.name.split(' ')[0];
+      let lastName = follower.name.split(' ')[1];
+      console.log('firstName', firstName && this.matchCredentials(firstName.toLowerCase()));
+      if (firstName && this.matchCredentials(firstName.toLowerCase())) return true;
+      if (lastName && this.matchCredentials(lastName.toLowerCase())) return true;
+    }
     // name id
-    if (this.matchCredentials(follower.id.toString())) return true;
+    if (follower.id && this.matchCredentials(follower.id.toString())) return true;
+    return false;
   }
 
   matchCredentials (followerData) {
-    let matchCount = 0;
+    console.log(followerData);
     for (let ind = 0; ind < this.state.selectedFollower.length; ind++) {
-      if (this.state.selectedFollower[ind] === followerData[ind]) matchCount++;
+      if (this.state.selectedFollower[ind] === followerData[ind]);
       else return false;
     }
-    if (matchCount === this.state.selectedFollower) return true;
+    return true;
   }
 
   getUser(event) {
-    axios.get(`${API_PREFIX}users/${event.target.value}/followers`)
+    let userName = event.target.value;
+    return axios.get(`${API_PREFIX}users/${userName}/followers`)
       .then(res => {
-        console.log(res.data);
         this.setState({
           error: null,
           followers: res.data,
+          userName,
         });
         return res.data;
       })
       .then(followers =>
-        followers.map(follower =>
+        Promise.map(followers, follower =>
           axios.get(`${API_PREFIX}users/${follower.login}`)
             .then(res => res.data)
             .catch(() => {
@@ -59,6 +72,7 @@ export default class Main extends Component {
             })
         )
       )
+      .then(followers => this.setState({followers}))
       .catch((err) => {
         this.setState({
           error: 'invalid user',
@@ -68,13 +82,18 @@ export default class Main extends Component {
       });
   }
 
+  updateSelectedFollower(event) {
+    console.log('lajsdfal', event.target);
+    this.setState({selectedFollower: event.target.value});
+  }
+
   render() {
     return (
-      <div id="main">
-        <form onSubmit={this.searchFollowers}>
+      <div id="main" className="container">
+        <form id="follower-finder">
           <div className="userName">
-            <label htmlFor="userName"><small>User Name</small></label>
             <input
+              placeholder="search"
               name="userName"
               type="userName"
               className="form-control"
@@ -82,27 +101,30 @@ export default class Main extends Component {
               required
             />
           </div>
+
           <div className="follower">
-            <label htmlFor="follower"><small>Search based on name, username, or id</small></label>
             <input
+              placeholder="filter followers (name, username, id)"
               name="follower"
               type="follower"
               className="form-control"
+              onChange={this.updateSelectedFollower}
               required
             />
           </div>
+
           <br />
           {this.state.error
             ? <div className="errorMessage"> {this.state.error} </div>
             : <div></div>
           }
-{/*          <div>
-            <button type="submit" className="btn">Search</button>
-          </div>*/}
         </form>
-        {this.state.followers.length ?
-          this.state.followers.filter(this.searchFollowers).map((follower) => (<h3>{follower.login}</h3>)) :
-          <div></div>
+        {!this.state.error && this.state.userName && <p>{this.state.userName}'s followers:</p>}
+        {this.state.followers.length
+          ? this.state.selectedFollower.length
+            ? this.state.followers.filter(this.searchFollowers).map((follower) => <FollowerCard key={follower.id} follower={follower} />)
+            : this.state.followers.map((follower) => <FollowerCard key={follower.id} follower={follower} />)
+          : <div>no followers</div>
         }
       </div>
     );

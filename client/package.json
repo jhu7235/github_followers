@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-css": "node-sass -w sass/github-follower.scss -o ./"
   },
   "author": "",
   "license": "ISC",
@@ -20,13 +21,16 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "bluebird": "^3.5.0",
     "chai": "^4.1.2",
     "chai-enzyme": "^0.8.0",
     "enzyme": "^2.9.1",
     "faker": "^4.1.0",
     "lodash": "^4.17.4",
+    "node-sass": "^4.5.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-switch-button": "^2.2.2",
     "sass": "^1.0.0-beta.2",
     "sinon": "^3.3.0",
     "sinon-chai": "^2.13.0"
