@@ -90,15 +90,16 @@ export default class Main extends Component {
   render() {
     return (
       <div id="main" className="container">
-        <form id="follower-finder">
+        <div id="follower-finder">
           <div className="userName">
             <input
-              placeholder="search"
+              placeholder="search user"
               name="userName"
               type="userName"
               className="form-control"
               onBlur={this.getUser}
               required
+              autoFocus
             />
           </div>
 
@@ -118,8 +119,7 @@ export default class Main extends Component {
             ? <div className="errorMessage"> {this.state.error} </div>
             : <div></div>
           }
-        </form>
-        {!this.state.error && this.state.userName && <p>{this.state.userName}'s followers:</p>}
+        </div>
         {this.state.followers.length
           ? this.state.selectedFollower.length
             ? this.state.followers.filter(this.searchFollowers).map((follower) => <FollowerCard key={follower.id} follower={follower} />)

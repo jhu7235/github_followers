@@ -25,21 +25,37 @@ input {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-gap: 10px;
+  background-color: #FFFFFF;
+  margin: 3% 0%;
+  padding: 1%;
+  border-radius: 5px;
+  border: solid #DDDDDD 1px;
   grid-template-rows: minmax(50px, auto);
+  h2 {
+    margin-top: 0;
+    margin-bottom: .25em;
+  };
+  h5 {
+    margin-top: 0;
+    margin-bottom: .75em;
+  };
 }
 
 .follower-portrait{
   grid-row: 1;
   grid-column: 1;
+  img {
+    width: 100%;
+  }
 }
 
 .follower-data {
 	grid-row: 1;
-	grid-column: 2/5;
+	grid-column: 2/6;
 }
 
-.follower-portrait img{
-  width: 100%;
+.follower-extra-data {
+  list-style-type: none
 }
 
 button.more-data-button {
@@ -50,8 +66,8 @@ button.more-data-button {
 
 #main {
 	background-color: #F5F5F5;
-	border-radius: 5px;
-	border: #DDDDDD 1px;
+  border-radius: 5px;
+  border: solid #DDDDDD 1px;
 	margin: 1%;
 }
 
@@ -65,3 +81,4 @@ button.more-data-button {
     margin: 0;
 	}
 }
+
