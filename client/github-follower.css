@@ -504,3 +504,9 @@ button.more-data-button {
     font-size: 2em;
     padding: 0.30em 0;
     margin: 0; }
+
+.errorMessage {
+  background-color: pink;
+  color: red;
+  border-radius: 5px;
+  padding: 5px; }
